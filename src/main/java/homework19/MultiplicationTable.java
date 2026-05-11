@@ -52,17 +52,13 @@ public class MultiplicationTable {
                 T[0][i+1] = chMax;
                 T[i+1][0] = chMax;
             }
-            //System.out.print(T[0][i+1] +"\t"+ T[i+1][0] +"\t");
         }
 
         //Наполнение результатами произведений
         for (int i = 1; i < l + 1; i++) {
             for (int j = 1; j < l + 1; j++) {
                     T[i][j] = T[0][j]*T[i][0];
-                    //System.out.print(T[0][j] +"\t"+ T[i][0] +"\t");
-                    //System.out.print(T[i][j] +"\t");
             }
-            //System.out.print("\n");
         }
 
         //Определение ширины столбца
@@ -91,6 +87,7 @@ public class MultiplicationTable {
         }
     }
 
+    //Функция расчета "длины" числа
     public static int getCellWidth(int number) {
         String data = String.valueOf(number);
         return data.length();
