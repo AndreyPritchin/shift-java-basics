@@ -3,85 +3,94 @@ import java.util.Scanner;
 
 public class MultiplicationTable {
     public static void main(String[] args) {
+        //Чтение чисел и шага из консоли
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите первое число:");
-        //Чтение первого числа
-        int ch1 = scanner.nextInt();
+        int number1 = scanner.nextInt();
         System.out.println("Введите второе число:");
-        //Чтение второго числа
-        int ch2 = scanner.nextInt();
+        int number2 = scanner.nextInt();
         System.out.println("Введите шаг:");
-        //Чтение шага
         int step = scanner.nextInt();
+
         //Проверка корректности параметра шаг
         if (step <= 1) {
             System.out.println("Шаг должен быть >= 1. Автоматически установлен шаг = 1");
             step = 1;
         }
 
-        int l;
-        int chMin;
-        int chMax;
-        int wMax = 0;
-
-        //Расчет длины массива множителей
-        if (ch1 > ch2) {
-            l = (ch1 - ch2)/step + 1;
-            chMin = ch2;
-            chMax = ch1;
-        } else {
-            l = (ch2 - ch1)/step + 1;
-            chMin = ch1;
-            chMax = ch2;
-        }
-
-        //Проверка граничного значения
-        if ((chMax - chMin)%step != 0) {
-            l++;
-        }
+        int widthMaximum = 0;
 
         //Объявление двумерного массива
-        int T[][] = new int[l+1][l+1];
+        int tableMultiplier[][];
 
-        //Наполнение массива множителями (вертикали и горизонтали)
-        for (int i = 0; i < l; i++) {
-            T[0][i+1] = chMin + i*step;
-            T[i+1][0] = chMin + i*step;
-            //Учет верхней границы диапазона
-            if (i == l - 1) {
-                T[0][i+1] = chMax;
-                T[i+1][0] = chMax;
-            }
-        }
+        //Вызов функции создания таблицы
+        tableMultiplier = CreateTable(number1,number2, step);
+        int lengthMultiplierArray = tableMultiplier.length;
 
         //Наполнение результатами произведений
-        for (int i = 1; i < l + 1; i++) {
-            for (int j = 1; j < l + 1; j++) {
-                    T[i][j] = T[0][j]*T[i][0];
+        for (int i = 1; i < lengthMultiplierArray; i++) {
+            for (int j = 1; j < lengthMultiplierArray; j++) {
+                    tableMultiplier[i][j] = tableMultiplier[0][j]* tableMultiplier[i][0];
             }
         }
 
         //Определение ширины столбца
-        for (int i = 0; i < l + 1; i++) {
-            for (int j = 0; j < l + 1; j++) {
-                if (wMax < getCellWidth(T[i][j])) {
-                    wMax = getCellWidth(T[i][j]);
+        for (int i = 0; i < lengthMultiplierArray; i++) {
+            for (int j = 0; j < lengthMultiplierArray; j++) {
+                if (widthMaximum < getCellWidth(tableMultiplier[i][j])) {
+                    widthMaximum = getCellWidth(tableMultiplier[i][j]);
                 }
             }
         }
 
         //Форматирование
-        String format = "%" + wMax + "d ";
+        String format = "%" + widthMaximum + "d ";
 
         //Вызов функции печати таблицы
-        PrintTable(T, l, format);
+        PrintTable(tableMultiplier, format);
+    }
+
+    //Функция создания таблицы с множителями
+    public static int[][] CreateTable(int value1, int value2, int step) {
+        int lengthMultiplierArray;
+        int numberMinimum;
+        int numberMaximum;
+
+        //Расчет длины массива множителей
+        if (value1 > value2) {
+            lengthMultiplierArray = (value1 - value2)/step + 1;
+            numberMinimum = value1;
+            numberMaximum = value2;
+        } else {
+            lengthMultiplierArray = (value2 - value1)/step + 1;
+            numberMinimum = value1;
+            numberMaximum = value2;
+        }
+
+        //Проверка граничного значения
+        if ((numberMaximum - numberMinimum)%step != 0) {
+            lengthMultiplierArray++;
+        }
+        //Объявление двумерного массива
+        int table[][] = new int[lengthMultiplierArray +1][lengthMultiplierArray +1];
+
+        //Наполнение массива множителями (вертикали и горизонтали)
+        for (int i = 0; i < lengthMultiplierArray; i++) {
+            table[0][i + 1] = table[i + 1][0] = numberMinimum + i * step;
+        }
+        //Учет верхней границы диапазона
+        table[0][lengthMultiplierArray] = numberMaximum;
+        table[lengthMultiplierArray][0] = numberMaximum;
+
+        return table;
     }
 
     //Функция печати таблицы
-    public static void PrintTable(int T[][], int l, String format) {
-        for (int i = 0; i < l + 1; i++) {
-            for (int j = 0; j < l + 1; j++) {
-                System.out.printf(format, T[i][j]);
+    public static void PrintTable(int table[][], String format) {
+        int lengthTable = table.length;
+        for (int i = 0; i < lengthTable; i++) {
+            for (int j = 0; j < lengthTable; j++) {
+                System.out.printf(format, table[i][j]);
             }
             System.out.print("\n");
         }
