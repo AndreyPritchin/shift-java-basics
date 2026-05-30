@@ -9,9 +9,9 @@ public class StringSpace {
         //Считывание исходной строки из консоли
         String stringInput = scanner.nextLine();
 
-        //Циклическая проверка корректности исходной строки (не пустая и не единичной длины)
-        while (stringInput.isEmpty() || stringInput.length() == 1) {
-            System.out.println("Строка не должна быть пустой или единичной длины");
+        //Циклическая проверка корректности исходной строки (не пустая и не единичной длины) и правильности символов
+        while (stringInput.isEmpty() || stringInput.length() == 1 || stringInput.matches("^[a-zA-Zа-яА-ЯёЁ.,?!;:\\s]+$") == false) {
+            System.out.println("Строка не должна быть пустой или единичной длины. Строка должна содержать буквы (или латиница, или кириллица), знаки препинания (точка, вопросительный и восклицательный знаки, запятая, двоеточие, точка с запятой) и пробелы");
             stringInput = scanner.nextLine();
         }
 
@@ -20,45 +20,24 @@ public class StringSpace {
         String charInput = scanner.nextLine();
 
         //Циклическая проверка корректности символа (единичный и не пробел)
-        while (charInput.length() != 1 || charInput.charAt(0) == ' ') {
+        while (charInput.length() != 1 || charInput == " ") {
             System.out.println("Можно ввести не больше одного символа. Символ не должен являться пробелом");
             charInput = scanner.nextLine();
         }
 
-        //Перевод типа символа - для замены из строки в символ
-        char targetChar = charInput.charAt(0);
-
         //Нормализация строки: удаление всех пробелов в начале и в конце исходной строки
         String normalString = stringInput.trim();
-        //Нормализация строки: итерационное сокращение повторяющихся пробелов до единичных пробелов
-        while (normalString.contains("  ")) {
-            normalString = normalString.replace("  ", " ");
-        }
 
-        //Замена символа - для замены на пробел
-        StringBuilder resultString = new StringBuilder();
-        for (int i = 0; i < normalString.length(); i++) {
-            char c = normalString.charAt(i);
-            if (c == targetChar) {
-                resultString.append(' ');
-            } else {
-                resultString.append(c);
-            }
-        }
+        //Замена символа для замены на пробел
+        normalString = normalString.replace(charInput, " ");
 
-        //Повторное удаление всех пробелов в начале и в конце исходной строки
-        String finalString = resultString.toString().trim();
-        //Повторное итерационное сокращение повторяющихся пробелов до единичных пробелов
-        while (finalString.contains("  ")) {
-            finalString = finalString.replace("  ", " ");
-        }
+        //Нормализация строки: сокращение повторяющихся пробелов до единичных пробелов
+        normalString = normalString.replaceAll("\\s+", " ");
 
         //Вывод результата
-        System.out.println("Исходная строка: " + normalString);
-        if (normalString.equals(finalString)) {
+        System.out.println("Исходная строка: " + stringInput +"\n"+ "Результат: " + normalString);
+        if (normalString.equals(stringInput)) {
             System.out.println("Строка не изменилась после преобразований.");
-        } else {
-            System.out.println("Результат: " + finalString);
         }
     }
 }
